@@ -1,6 +1,6 @@
 # ⚖️ AI Legal Assistant System
 
-Sistem fullstack berbasis **Next.js + MongoDB + Google Gemini AI + Clerk Auth** untuk:
+Sistem fullstack berbasis **Next.js + Google Gemini AI + Clerk Auth** untuk:
 
 - Konsultasi perkara hukum berbasis AI
 - Analisis otomatis kasus hukum
@@ -17,11 +17,6 @@ Sistem fullstack berbasis **Next.js + MongoDB + Google Gemini AI + Clerk Auth** 
 - Next.js (App Router)
 - TypeScript
 - Tailwind CSS
-
-### Database
-
-- MongoDB Atlas
-- Mongoose ORM
 
 ### Authentication
 

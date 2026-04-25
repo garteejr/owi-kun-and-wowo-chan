@@ -2,20 +2,34 @@
 
 import { useState } from "react";
 
-export default function InputForm({ onSubmit }: any) {
+interface InputFormProps {
+  onSubmit: (data: { konteks: string; kronologi: string }) => void;
+  disabled?: boolean;
+}
+
+const MAX_KRONOLOGI = 1000;
+
+export default function InputForm({ onSubmit, disabled = false }: InputFormProps) {
   const [konteks, setKonteks] = useState("");
   const [kronologi, setKronologi] = useState("");
 
+  const isValid = konteks.trim().length > 0 && kronologi.trim().length > 0;
+  const kronologiRemaining = MAX_KRONOLOGI - kronologi.length;
+
   const handleSend = () => {
-    if (!konteks || !kronologi) return;
-    onSubmit({ konteks, kronologi });
+    if (!isValid) return;
+    onSubmit({ konteks: konteks.trim(), kronologi: kronologi.trim() });
     setKonteks("");
     setKronologi("");
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && isValid) handleSend();
+  };
+
   return (
-    <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
-      <div className="w-full max-w-6xl mx-auto bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-sm">
+    <div className="w-full py-6">
+      <div className="w-full bg-white border border-neutral-200 rounded-2xl p-8 sm:p-10 lg:p-14 shadow-sm">
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
@@ -34,39 +48,64 @@ export default function InputForm({ onSubmit }: any) {
           </div>
         </div>
 
-        {/* Two-column on lg, stacked on mobile */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-8">
+        {/* Fields — stacked layout agar seimbang secara visual */}
+        <div className="flex flex-col gap-6 mb-8">
 
           {/* Konteks */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-green-700 uppercase tracking-widest">
+            <label
+              htmlFor="konteks"
+              className="text-xs font-semibold text-green-700 uppercase tracking-widest"
+            >
               Konteks Masalah
             </label>
             <p className="text-xs text-neutral-400 mb-1">
               Jenis masalah hukum yang dihadapi
             </p>
             <input
+              id="konteks"
               type="text"
               placeholder="Contoh: penipuan online, sengketa kontrak..."
               value={konteks}
               onChange={(e) => setKonteks(e.target.value)}
-              className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-400 transition"
+              onKeyDown={handleKeyDown}
+              className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm sm:text-base text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-400 transition"
             />
           </div>
 
           {/* Kronologi */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-semibold text-green-700 uppercase tracking-widest">
-              Kronologi
-            </label>
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="kronologi"
+                className="text-xs font-semibold text-green-700 uppercase tracking-widest"
+              >
+                Kronologi
+              </label>
+              <span
+                className={`text-xs tabular-nums transition-colors ${
+                  kronologiRemaining < 100
+                    ? "text-red-400 font-medium"
+                    : "text-neutral-400"
+                }`}
+              >
+                {kronologiRemaining} karakter tersisa
+              </span>
+            </div>
             <p className="text-xs text-neutral-400 mb-1">
               Ceritakan kejadian secara runtut dan detail
             </p>
             <textarea
+              id="kronologi"
               placeholder="Ceritakan kejadian secara runtut..."
               value={kronologi}
-              onChange={(e) => setKronologi(e.target.value)}
-              className="w-full flex-1 min-h-[130px] lg:min-h-[160px] bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm sm:text-base leading-relaxed focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-400 transition resize-none"
+              onChange={(e) => {
+                if (e.target.value.length <= MAX_KRONOLOGI) {
+                  setKronologi(e.target.value);
+                }
+              }}
+              rows={6}
+              className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm sm:text-base text-neutral-900 placeholder:text-neutral-400 leading-relaxed focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-400 transition resize-none"
             />
           </div>
         </div>
@@ -78,7 +117,7 @@ export default function InputForm({ onSubmit }: any) {
           </p>
           <button
             onClick={handleSend}
-            disabled={!konteks || !kronologi}
+            disabled={!isValid || disabled}
             className="shrink-0 flex items-center gap-2 px-7 py-3 rounded-full bg-green-400 text-green-900 text-sm sm:text-base font-medium hover:bg-green-500 active:scale-95 transition disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
