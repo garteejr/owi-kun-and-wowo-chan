@@ -1,46 +1,51 @@
-// prompt.ts
 import { Message, LegalInput } from "./types";
 
 export function buildPrompt(input: LegalInput, history: Message[]) {
   const historyText = history
+    .slice(-6) // 🔥 penting: batasi context biar stabil
     .map((m) => `${m.role.toUpperCase()}: ${m.content}`)
     .join("\n");
 
   return `
-Kamu adalah AI asisten hukum di Indonesia.
+Kamu adalah AI ANALISIS HUKUM INDONESIA.
 
-Riwayat percakapan:
+⚠️ ATURAN KETAT:
+- WAJIB output HANYA JSON VALID
+- TIDAK BOLEH ada teks selain JSON
+- TIDAK BOLEH markdown
+- TIDAK BOLEH penjelasan tambahan
+
+RIWAYAT:
 ${historyText}
 
-Input user:
-Konteks masalah: ${input.konteks}
+INPUT USER:
+Konteks: ${input.konteks}
 Kronologi: ${input.kronologi}
 
-Tugas kamu:
-1. Identifikasi jenis masalah hukum
-2. Kategorikan (pidana/perdata/dll)
-3. Analisis masalah
-4. Berikan rekomendasi
-5. Buat langkah konkret step-by-step (action plan)
+TUGAS:
+Analisis kasus hukum secara ringkas, jelas, dan sistematis.
 
-Jawaban WAJIB format JSON:
+FORMAT OUTPUT (WAJIB IKUT 100%):
 
 {
-  "jenis_masalah": "",
-  "kategori_hukum": "",
-  "analisis": "",
-  "rekomendasi": [],
+  "jenis_masalah": "string",
+  "kategori_hukum": "pidana | perdata | administrasi | siber | lainnya",
+  "analisis": "string sederhana",
+  "rekomendasi": ["string"],
   "next_steps": [
     {
-      "step": 1,
-      "aksi": "",
-      "detail": ""
+      "step": number,
+      "aksi": "string",
+      "detail": "string"
     }
   ],
-  "pertanyaan_lanjutan": []
+  "pertanyaan_lanjutan": ["string"]
 }
 
-Gunakan bahasa sederhana.
-Jangan beri kepastian hukum mutlak.
+RULES OUTPUT:
+- semua field wajib ada
+- jika tidak tahu → isi ""
+- jangan tambahkan field baru
+- jangan jelaskan apa pun
 `;
 }

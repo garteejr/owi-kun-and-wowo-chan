@@ -9,15 +9,18 @@ const keys = [
 ];
 
 export async function runChat(prompt: string, history: Message[]) {
-  const models = ["gemini-2.5-flash", "gemini-3.0-flash"];
+  const models = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-pro"];
 
   for (let i = 0; i < keys.length; i++) {
     for (let j = 0; j < models.length; j++) {
       try {
         const genAI = new GoogleGenerativeAI(keys[i]);
-
         const model = genAI.getGenerativeModel({
           model: models[j],
+          // ✅ Paksa output JSON — tidak ada markdown fence lagi
+          generationConfig: {
+            responseMimeType: "application/json",
+          },
         });
 
         const chat = model.startChat({
@@ -30,12 +33,7 @@ export async function runChat(prompt: string, history: Message[]) {
         const result = await chat.sendMessage(prompt);
         const text = result.response.text();
 
-        // debug
-        console.log("FULL RESPONSE:", result.response);
-        console.log("TEXT:", result.response.text());
-
         if (!text) throw new Error("Empty response");
-
         return text;
       } catch (err) {
         console.error(`Key ${i + 1} + Model ${models[j]} gagal`, err);
@@ -43,7 +41,39 @@ export async function runChat(prompt: string, history: Message[]) {
     }
   }
 
-  // ✅ WAJIB biar tidak undefined
+  throw new Error("Semua API key & model gagal");
+}
+
+// Tambah fungsi ini di gemini.ts
+export async function runChatPlain(prompt: string, history: Message[]) {
+  const models = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-pro"];
+
+  for (let i = 0; i < keys.length; i++) {
+    for (let j = 0; j < models.length; j++) {
+      try {
+        const genAI = new GoogleGenerativeAI(keys[i]);
+        const model = genAI.getGenerativeModel({
+          model: models[j],
+          // ✅ Tidak ada responseMimeType — bebas return teks biasa
+        });
+
+        const chat = model.startChat({
+          history: history.map((msg) => ({
+            role: msg.role === "assistant" ? "model" : "user",
+            parts: [{ text: msg.content }],
+          })),
+        });
+
+        const result = await chat.sendMessage(prompt);
+        const text = result.response.text();
+        if (!text) throw new Error("Empty response");
+        return text;
+      } catch (err) {
+        console.error(`Key ${i + 1} + Model ${models[j]} gagal`, err);
+      }
+    }
+  }
+
   throw new Error("Semua API key & model gagal");
 }
 
@@ -52,23 +82,23 @@ export async function runChat(prompt: string, history: Message[]) {
 // ==========================
 export async function analyzeLegal(prompt: string, history: Message[]) {
   const analyzerPrompt = `
-Kamu adalah AI ANALYZER hukum.
+Kamu adalah AI ANALYZER hukum Indonesia.
 
 Tugas:
-- Identifikasi jenis masalah
-- Kategori hukum
-- Ringkasan inti masalah
+- Identifikasi jenis masalah hukum
+- Tentukan kategori hukum yang relevan
+- Buat ringkasan inti masalah
 
-Jawaban JSON:
+Kembalikan HANYA JSON berikut, tanpa teks lain:
 {
-  "jenis_masalah": "",
-  "kategori_hukum": "",
-  "ringkasan": ""
+  "jenis_masalah": "string",
+  "kategori_hukum": "string",
+  "ringkasan": "string"
 }
 
+Input:
 ${prompt}
 `;
-
   return runChat(analyzerPrompt, history);
 }
 
@@ -77,23 +107,23 @@ ${prompt}
 // ==========================
 export async function reasonLegal(prompt: string, history: Message[]) {
   const reasonerPrompt = `
-Kamu adalah AI REASONER hukum.
+Kamu adalah AI REASONER hukum Indonesia.
 
 Tugas:
-- Analisis mendalam
-- Identifikasi risiko
-- Nilai kekuatan kasus
+- Buat analisis hukum mendalam berdasarkan data analyzer
+- Identifikasi risiko-risiko yang mungkin dihadapi
+- Nilai kekuatan kasus (Sangat Kuat / Kuat / Sedang / Lemah / Sangat Lemah)
 
-Jawaban JSON:
+Kembalikan HANYA JSON berikut, tanpa teks lain:
 {
-  "analisis": "",
-  "risiko": [],
-  "kekuatan_kasus": ""
+  "analisis": "string",
+  "risiko": ["string", "string"],
+  "kekuatan_kasus": "string"
 }
 
+Input:
 ${prompt}
 `;
-
   return runChat(reasonerPrompt, history);
 }
 
@@ -101,28 +131,32 @@ ${prompt}
 // MODE 3: PLANNER
 // ==========================
 export async function planLegal(prompt: string, history: Message[]) {
+  // ✅ Tambahkan prompt instruksi yang jelas
   const plannerPrompt = `
-Kamu adalah AI PLANNER hukum.
+Kamu adalah AI PLANNER hukum Indonesia.
 
 Tugas:
-- Berikan rekomendasi
-- Buat langkah konkret step-by-step
+- Berikan rekomendasi tindakan hukum yang perlu diambil
+- Susun langkah-langkah konkret yang harus dilakukan korban
+- Ajukan pertanyaan lanjutan untuk memperjelas kasus
 
-Jawaban JSON:
+Kembalikan HANYA JSON berikut, tanpa teks lain:
 {
-  "rekomendasi": [],
+  "rekomendasi": ["string", "string"],
   "next_steps": [
-    {
-      "step": 1,
-      "aksi": "",
-      "detail": ""
-    }
+    { "aksi": "string", "detail": "string" }
   ],
-  "pertanyaan_lanjutan": []
+  "pertanyaan_lanjutan": ["string", "string"],
+  "emergency_contacts": [
+    { "name": "Polisi (Darurat)", "href": "tel:110" },
+    { "name": "Patroli Siber", "href": "https://patrolisiber.id" }
+  ]
 }
 
+Input:
 ${prompt}
 `;
 
+  // ✅ Hapus guard yang salah — runChat return string, bukan object
   return runChat(plannerPrompt, history);
 }

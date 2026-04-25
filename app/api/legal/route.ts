@@ -5,22 +5,29 @@ import { Message } from "@/app/lib/types";
 
 let conversationStore: Message[] = [];
 
-function safeJSONParse(text: string) {
-  try {
-    return JSON.parse(text);
-  } catch {
-    return {
-      error: "INVALID_JSON",
-      raw: text,
-    };
-  }
-}
+// ✅ Ganti ensureObject dengan extractJSON
+function extractJSON(raw: any): object {
+  // Sudah object, langsung return
+  if (typeof raw === "object" && raw !== null) return raw;
 
-function cleanJSON(text: string) {
-  return text
-    .replace(/```json/g, "")
-    .replace(/```/g, "")
-    .trim();
+  // Bukan string, return empty
+  if (typeof raw !== "string") return {};
+
+  try {
+    // Coba parse langsung
+    return JSON.parse(raw);
+  } catch {
+    // Strip markdown fence: ```json ... ``` atau ``` ... ```
+    const match = raw.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (match) {
+      try {
+        return JSON.parse(match[1].trim());
+      } catch {
+        return {};
+      }
+    }
+    return {};
+  }
 }
 
 export async function POST(req: Request) {
@@ -32,60 +39,45 @@ Konteks: ${body.konteks}
 Kronologi: ${body.kronologi}
 `;
 
-    // simpan user dulu
-    conversationStore.push({
-      role: "user",
-      content: inputText,
-    });
-
-    // baru ambil history
+    conversationStore.push({ role: "user", content: inputText });
     const history = getLastMessages(conversationStore);
 
-    // ======================
     // STEP 1: ANALYZER
-    // ======================
     const analyzerRaw = await analyzeLegal(inputText, history);
-    const analyzer = safeJSONParse(cleanJSON(analyzerRaw));
+    const analyzer = extractJSON(analyzerRaw); // ✅
+    console.log("[ANALYZER PARSED]", analyzer);
 
-    // ======================
     // STEP 2: REASONER
-    // ======================
     const reasonerRaw = await reasonLegal(JSON.stringify(analyzer), history);
-    const reasoner = safeJSONParse(cleanJSON(reasonerRaw));
+    const reasoner = extractJSON(reasonerRaw); // ✅
+    console.log("[REASONER PARSED]", reasoner);
 
-    // ======================
     // STEP 3: PLANNER
-    // ======================
     const plannerRaw = await planLegal(
-      JSON.stringify({
-        ...analyzer,
-        ...reasoner,
-      }),
+      JSON.stringify({ ...analyzer, ...reasoner }),
       history,
     );
-    const planner = safeJSONParse(cleanJSON(plannerRaw));
+    const planner = extractJSON(plannerRaw); // ✅
+    console.log("[PLANNER PARSED]", planner);
 
-    // ======================
-    // FINAL MERGE
-    // ======================
-    const finalResult = {
-      ...analyzer,
-      ...reasoner,
-      ...planner,
-    };
+    const finalResult = { ...analyzer, ...reasoner, ...planner };
+    console.log("[FINAL RESULT]", finalResult);
 
-    // simpan AI response
+    if (Object.keys(finalResult).length === 0) {
+      return Response.json(
+        { error: "AI mengembalikan hasil kosong" },
+        { status: 500 },
+      );
+    }
+
     conversationStore.push({
       role: "assistant",
       content: JSON.stringify(finalResult),
     });
 
-    return Response.json({
-      result: finalResult,
-    });
+    return Response.json({ result: finalResult });
   } catch (err) {
     console.error(err);
-
     return Response.json(
       { error: "Terjadi kesalahan pada AI" },
       { status: 500 },
