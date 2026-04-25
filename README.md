@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⚖️ AI Legal Assistant System
 
-## Getting Started
+Sistem fullstack berbasis **Next.js + MongoDB + Google Gemini AI + Clerk Auth** untuk:
 
-First, run the development server:
+- Konsultasi perkara hukum berbasis AI
+- Analisis otomatis kasus hukum
+- Generate laporan perkara (PDF)
+- Dashboard manajemen kasus
+- Landing page SaaS modern
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Frontend + Backend
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
 
-## Learn More
+### Database
 
-To learn more about Next.js, take a look at the following resources:
+- MongoDB Atlas
+- Mongoose ORM
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Authentication
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Clerk Auth
 
-## Deploy on Vercel
+### AI Engine
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Google Gemini API
+  - gemini-2.5-flash (chat realtime)
+  - gemini-2.0-flash (lightweight fallback)
+  - gemini-1.5-pro (deep analysis & report generation)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### PDF Generator
+
+- pdf-lib
+
+---
+
+## 🧠 Core Features
+
+### 1. AI Legal Consultation
+
+- Chat dengan AI tentang kasus hukum
+- Context-aware conversation (berbasis histori kasus)
+- Real-time response
+
+### 2. AI Case Analysis
+
+- Input kronologi perkara
+- AI menganalisis:
+  - Ringkasan kasus
+  - Jenis tindak pidana
+  - Risiko hukum
+  - Rekomendasi tindakan
+
+### 3. AI Report Generator
+
+- Generate laporan perkara otomatis
+- Format profesional (instansi style)
+- Export ke PDF
+
+### 4. PDF Download System
+
+- Generate laporan menggunakan `pdf-lib`
+- Kop surat instansi
+- Tanda tangan section
+- Multi-page support
+
+### 5. Dashboard System
+
+- Manajemen kasus
+- Riwayat analisis AI
+- Download laporan
+
+### 6. Landing Page
+
+- Hero section modern
+- Demo AI chat
+- Feature showcase
+- CTA login/register
+
+---
