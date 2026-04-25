@@ -78,6 +78,49 @@ export async function runChatPlain(prompt: string, history: Message[]) {
 }
 
 // ==========================
+// MODE 4: REPORT GENERATOR (NEW)
+// ==========================
+export async function generateReportFromPrompt(
+  prompt: string,
+  history: Message[],
+) {
+  const reportPrompt = `
+Kamu adalah AI PENYUSUN LAPORAN PENGADUAN RESMI INDONESIA (format SPKT).
+
+Tugas:
+- Ubah input user menjadi laporan resmi kepolisian yang rapi
+- Gunakan bahasa formal hukum Indonesia
+- Jangan mengubah fakta, hanya merapikan struktur
+- Jika ada data tidak lengkap, isi "Tidak diketahui"
+
+WAJIB output HANYA JSON valid berikut:
+
+{
+  "judul": "LAPORAN PENGADUAN TINDAK PIDANA",
+  "waktuKejadian": "",
+  "tempatKejadian": "",
+  "kronologi": "",
+  "terlapor": "",
+  "korban": "",
+  "bagaimanaTerjadi": "",
+  "dilaporkanPada": "",
+  "jenisTindakPidana": "",
+  "barangBukti": "",
+  "tindakanDilakukan": "",
+  "kepalaInstansi": "",
+  "namaPelapor": "",
+  "tanggalPelapor": "",
+  "noTelepon": ""
+}
+
+INPUT USER:
+${prompt}
+`;
+
+  return runChat(reportPrompt, history);
+}
+
+// ==========================
 // MODE 1: ANALYZER
 // ==========================
 export async function analyzeLegal(prompt: string, history: Message[]) {
