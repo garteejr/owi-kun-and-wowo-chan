@@ -54,11 +54,22 @@ export default function Navbar() {
               Analysis
             </a>
             <a
-              href="/report"
+              href="/bantuan-hukum"
               className={
-                pathname === "/report"
+                pathname === "/bantuan-hukum"
                   ? "text-[#2e7d32] font-semibold"
                   : "text-[#222] hover:text-[#2e7d32]"
+              }
+            >
+              Cari Lbh
+            </a>
+            <a
+              href="/report"
+              onClick={() => setMenuOpen(false)}
+              className={
+                pathname === "/report"
+                  ? "px-4 py-3 rounded-lg font-medium bg-[#e8f5e9] text-[#2e7d32]"
+                  : "px-4 py-3 rounded-lg font-medium text-[#222] hover:bg-[#f5f5f5]"
               }
             >
               Report
@@ -149,6 +160,17 @@ export default function Navbar() {
               }
             >
               Analysis
+            </a>
+            <a
+              href="/bantuan-hukum"
+              onClick={() => setMenuOpen(false)}
+              className={
+                pathname === "/bantuan-hukum"
+                  ? "px-4 py-3 rounded-lg font-medium bg-[#e8f5e9] text-[#2e7d32]"
+                  : "px-4 py-3 rounded-lg font-medium text-[#222] hover:bg-[#f5f5f5]"
+              }
+            >
+              Cari Lbh
             </a>
             <a
               href="/report"
