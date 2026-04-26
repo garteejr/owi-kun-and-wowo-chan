@@ -15,7 +15,6 @@ export type ReportInput = {
   kronologi: string;
   terlapor: string;
   korban: string;
-  bagaimanaTerjadi: string;
   dilaporkanPada: string; // datetime-local string
   jenisTindakPidana: string;
   barangBukti: string; // URL (Google Drive / JPG / MP4 / PDF)

@@ -66,7 +66,6 @@ export default function Home() {
               Temukan
               <span className="font-semibold text-[#2d5a1e]"> LBH</span>,
               <span className="font-semibold text-[#2d5a1e]"> Posbakum</span>,
-              <span className="font-semibold text-[#2d5a1e]"> pengacara terpercaya</span>,
               dan konsultasi hukum langsung dari kota Anda.
             </p>
 
@@ -86,41 +85,6 @@ export default function Home() {
             </div>
           </div>
 
-        </div>
-      </section>
-
-      {/* SECTION 3 */}
-      <section className="w-full px-4 sm:px-6 lg:px-8 pb-24">
-        <div className="max-w-6xl mx-auto bg-white rounded-3xl border border-[#e5edd8] shadow-xl p-8 sm:p-14">
-
-          <div className="text-center mb-10">
-            <h3 className="text-3xl sm:text-4xl font-bold text-[#18320d]">
-              Kenapa Memilih Kami?
-            </h3>
-
-            <p className="mt-3 text-gray-500 max-w-2xl mx-auto">
-              Platform digital modern untuk perlindungan hukum masyarakat Indonesia.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-
-            <div className="bg-[#f8fbf3] rounded-3xl p-6 text-center">
-              <h4 className="text-3xl font-bold text-[#18320d]">10K+</h4>
-              <p className="text-sm text-gray-500 mt-2">Laporan Diproses</p>
-            </div>
-
-            <div className="bg-[#f8fbf3] rounded-3xl p-6 text-center">
-              <h4 className="text-3xl font-bold text-[#18320d]">500+</h4>
-              <p className="text-sm text-gray-500 mt-2">Partner Hukum</p>
-            </div>
-
-            <div className="bg-[#f8fbf3] rounded-3xl p-6 text-center">
-              <h4 className="text-3xl font-bold text-[#18320d]">24/7</h4>
-              <p className="text-sm text-gray-500 mt-2">Layanan Online</p>
-            </div>
-
-          </div>
         </div>
       </section>
 

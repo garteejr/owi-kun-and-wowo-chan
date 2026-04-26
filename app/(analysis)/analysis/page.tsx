@@ -52,7 +52,9 @@ export default function AnalisaPage() {
         },
       ]);
 
-      setResult(json.result);
+      setResult(
+        typeof json.result === "string" ? JSON.parse(json.result) : json.result,
+      );
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
     } finally {
@@ -70,7 +72,7 @@ export default function AnalisaPage() {
       const res = await fetch("/api/legal/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({ question, history: messages }),
       });
 
       const json = await res.json();
@@ -93,7 +95,6 @@ export default function AnalisaPage() {
       <Navbar />
 
       <main className="min-h-screen bg-[#f7f9f4] px-4 pb-12 sm:px-6 flex items-center">
-
         {/* Loading Overlay */}
         {isLoading && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm animate-in fade-in duration-200">
@@ -102,8 +103,18 @@ export default function AnalisaPage() {
                 <div className="absolute inset-0 rounded-full border-4 border-[#e8f3d8]" />
                 <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#5a9e3a] animate-spin" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <svg width="18" height="18" fill="none" stroke="#5a9e3a" strokeWidth="2" viewBox="0 0 24 24">
-                    <path d="M9 12h6M9 16h6M6 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" strokeLinecap="round" />
+                  <svg
+                    width="18"
+                    height="18"
+                    fill="none"
+                    stroke="#5a9e3a"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M9 12h6M9 16h6M6 3h12a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </div>
               </div>
@@ -125,16 +136,25 @@ export default function AnalisaPage() {
         )}
 
         <div className="max-w-4xl mx-auto">
-
-
           <InputForm onSubmit={handleSubmit} disabled={isLoading} />
 
           {/* Error */}
           {error && (
             <div className="flex items-start gap-3 bg-[#fef3f2] border border-[#f5c6c6] rounded-xl px-5 py-4 my-4">
               <div className="w-5 h-5 rounded-full bg-[#fde8e8] flex items-center justify-center flex-shrink-0 mt-0.5">
-                <svg width="10" height="10" fill="none" stroke="#a94040" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path d="M12 8v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" strokeLinecap="round" strokeLinejoin="round" />
+                <svg
+                  width="10"
+                  height="10"
+                  fill="none"
+                  stroke="#a94040"
+                  strokeWidth="2.5"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 8v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </div>
               <span className="text-[0.8125rem] text-[#a94040] leading-relaxed">
@@ -150,7 +170,6 @@ export default function AnalisaPage() {
             onFollowUp={handleFollowUp}
             isLoading={isLoading}
           />
-
         </div>
       </main>
     </>

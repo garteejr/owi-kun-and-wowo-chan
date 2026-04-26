@@ -8,7 +8,6 @@ type FormData = {
   tempatKejadian: string;
   jenisTindakPidana: string;
   kronologi: string;
-  bagaimanaTerjadi: string;
   terlapor: string;
   korban: string;
   barangBukti: string;
@@ -28,7 +27,7 @@ const steps = [
   {
     title: "Kronologi Kasus",
     subtitle: "Jelaskan kejadian secara runtut",
-    fields: ["kronologi", "bagaimanaTerjadi"],
+    fields: ["kronologi"],
   },
   {
     title: "Pihak Terlibat",
@@ -52,7 +51,6 @@ const meta: Record<string, any> = {
   tempatKejadian: { label: "Tempat Kejadian", type: "text" },
   jenisTindakPidana: { label: "Jenis Tindak Pidana", type: "text" },
   kronologi: { label: "Kronologi", type: "textarea" },
-  bagaimanaTerjadi: { label: "Bagaimana Terjadi", type: "textarea" },
   terlapor: { label: "Terlapor", type: "text" },
   korban: { label: "Korban", type: "text" },
   barangBukti: { label: "Barang Bukti", type: "text" },
@@ -75,7 +73,6 @@ export default function ReportPage() {
     tempatKejadian: "",
     jenisTindakPidana: "",
     kronologi: "",
-    bagaimanaTerjadi: "",
     terlapor: "",
     korban: "",
     barangBukti: "",
@@ -143,7 +140,6 @@ export default function ReportPage() {
     <div className="min-h-screen bg-[#f7f9f4] flex flex-col">
       <Navbar />
 
-      {/* MOBILE RESPONSIVE */}
       <main className="flex-1 px-3 sm:px-6 py-4 sm:py-8 flex items-start sm:items-center justify-center">
         <div className="w-full max-w-2xl bg-white border border-[#dde8d0] rounded-2xl shadow-xl overflow-hidden">
 

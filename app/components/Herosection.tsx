@@ -40,8 +40,7 @@ export default function HeroSection() {
           <p className="text-[1rem] sm:text-[1.1rem] text-[#4b5563] leading-relaxed font-light mb-8 max-w-md animate-fadeUp delay-200">
             Semua yang kamu butuhkan untuk memahami hukum —
             <span className="font-semibold text-[#2d5a1e] hover:text-[#5a9e3a] transition-colors"> analisis kasus</span>,
-            <span className="font-semibold text-[#2d5a1e] hover:text-[#5a9e3a] transition-colors"> kalkulator sanksi</span>,
-            <span className="font-semibold text-[#2d5a1e] hover:text-[#5a9e3a] transition-colors"> to-do peraturan</span>,
+            
             hingga
             <span className="font-semibold text-[#2d5a1e] hover:text-[#5a9e3a] transition-colors"> AI legal assistant</span>.
           </p>

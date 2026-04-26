@@ -102,7 +102,6 @@ WAJIB output HANYA JSON valid berikut:
   "kronologi": "",
   "terlapor": "",
   "korban": "",
-  "bagaimanaTerjadi": "",
   "dilaporkanPada": "",
   "jenisTindakPidana": "",
   "barangBukti": "",

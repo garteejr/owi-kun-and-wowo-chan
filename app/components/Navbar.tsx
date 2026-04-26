@@ -17,7 +17,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <WowocareIcon size={36} />
           <span className="text-2xl font-semibold tracking-tight text-[#111]">
-            Wowocare
+            HakKita
           </span>
         </div>
 
